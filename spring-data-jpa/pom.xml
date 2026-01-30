@@ -11,7 +11,7 @@
 	<groupId>com.example.springboot.practice</groupId>
 	<artifactId>spring-data-jpa-course</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-data-jpa-course</name>
+	<name>spring-data-jpa</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
