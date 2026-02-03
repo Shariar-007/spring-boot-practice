@@ -3,8 +3,10 @@ package com.examServer.controller;
 import com.examServer.entity.JwtRequest;
 import com.examServer.entity.JwtResponse;
 import com.examServer.entity.User;
+import com.examServer.exceptionHandler.UserFoundException;
 import com.examServer.jwtConfig.JwtTokenHelper;
 import com.examServer.services.implementation.UserDetailServiceImplementation;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,23 +41,25 @@ public class AuthenticationController {
         }
     }
 
+    @Hidden
     @PostMapping("/login")
+    @io.swagger.v3.oas.annotations.Operation(security = { }) // This removes the lock icon for this specific API
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         try {
             // Step 1: Authenticate the user
             this.authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
-        } catch (Exception e){
+        } catch (UserFoundException e){
             e.printStackTrace();
-            throw new Exception("User not found");
+            throw new UserFoundException("User not found");
         }
         ///////////// authenticate
         // Step 2: Load user details
         UserDetails userDetails = this.userDetailServiceImplementation.loadUserByUsername(jwtRequest.getUsername());
-//        System.out.println(userDetails);
+        System.out.println(userDetails);
         // Step 3: Generate the token
         String token = this.jwtTokenHelper.generateToken(userDetails);
         // Step 4: Return response
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new JwtResponse("Bearer " + token));
     }
 
     @GetMapping("/current-user")

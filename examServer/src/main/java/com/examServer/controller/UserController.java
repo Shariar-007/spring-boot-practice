@@ -5,10 +5,13 @@ import com.examServer.entity.User;
 import com.examServer.entity.UserRole;
 import com.examServer.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -18,9 +21,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     public User createUser(@RequestBody User user) throws Exception {
         user.setImage("default.png");
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         Set<UserRole> userRoles = new HashSet<>();
 
         Role role = new Role();
@@ -32,7 +39,6 @@ public class UserController {
         userRole.setRole(role);
 
         userRoles.add(userRole);
-//        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         User user1 = this.userService.createUser(user, userRoles);
         return user1;
@@ -43,9 +49,11 @@ public class UserController {
         return this.userService.getAllUser();
     }
 
+
     @GetMapping("/{userName}")
-    public User getUser(@PathVariable("userName") String username) throws Exception {
-        return this.userService.getUser(username);
+    public ResponseEntity<User> getUser(@PathVariable("userName") String username) throws Exception {
+        User user = this.userService.getUser(username);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/userId/{userId}")

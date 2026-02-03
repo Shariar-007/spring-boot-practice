@@ -2,6 +2,8 @@ package com.examServer.services.implementation;
 
 import com.examServer.entity.User;
 import com.examServer.entity.UserRole;
+import com.examServer.exceptionHandler.UserFoundException;
+import com.examServer.exceptionHandler.UserNotFoundException;
 import com.examServer.repository.RoleRepository;
 import com.examServer.repository.UserRepository;
 import com.examServer.services.UserService;
@@ -27,7 +29,7 @@ public class UserServiceImplementation implements UserService {
 
         if (local != null) {
             System.out.println("User is already there !!");
-            throw new Exception("User is already there !!");
+            throw new UserFoundException("User is already there !!");
         } else {
             // user create
             for (UserRole ur : userRoles) {
@@ -63,7 +65,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User updateUser(User user, Long userId) throws Exception {
         // userName and password can not be updatable
-        User foundedUser = this.userRepository.findById(userId).orElseThrow(() -> new Exception("User is not present !!"));
+        User foundedUser = this.userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User is not present !!"));
         foundedUser.setFirstName(user.getFirstName());
         foundedUser.setLastName(user.getLastName());
         foundedUser.setEmail(user.getEmail());

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableGlobalAuthentication()
 public class MySecurityConfig {
-    public static final String[] PUBLIC_URLS = {"/login"};
+    public static final String[] PUBLIC_URLS = {"/login", "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html" };
     @Autowired
     private UserDetailServiceImplementation userDetailServiceImplementation;
     @Autowired
@@ -35,6 +36,11 @@ public class MySecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
