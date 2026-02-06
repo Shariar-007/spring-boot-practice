@@ -23,7 +23,7 @@ public class Category {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Quiz> quizzes = new LinkedHashSet<>();
 

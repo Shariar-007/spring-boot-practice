@@ -1,11 +1,12 @@
 package com.examServer.entity.exam;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,6 +20,7 @@ public class Quiz {
 
     private String title;
 
+    @Column(length = 2000)
     private String description;
 
     private String maxMarks;
@@ -30,6 +32,7 @@ public class Quiz {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    private Set<Question> questions = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Question> questions = new HashSet<>();
 }
