@@ -21,6 +21,7 @@ public class Category {
 
     private String title;
 
+    @Column(length = 2000)
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)

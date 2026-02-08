@@ -10,7 +10,7 @@ public interface OptionService {
     public OptionOfQuestion updateOption(OptionOfQuestion option);
     public Set<OptionOfQuestion> getOptions();
     public OptionOfQuestion getOption(Long optionId);
-    public OptionOfQuestion getOptionOfQuestion(Question question);
-    public OptionOfQuestion getOptionByValidityForQuestion(Question question, Boolean b);
+    public Set<OptionOfQuestion> getOptionOfQuestion(Question question);
+    public Set<OptionOfQuestion> getOptionByValidityForQuestion(Question question, Boolean b);
     public void deleteOption(Long optionId);
 }

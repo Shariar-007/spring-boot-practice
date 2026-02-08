@@ -4,6 +4,7 @@ import com.examServer.entity.Role;
 import com.examServer.entity.User;
 import com.examServer.entity.UserRole;
 import com.examServer.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin("*")
+@Tag(name = "User Details")
 public class UserController {
     @Autowired
     private UserService userService;
