@@ -3,6 +3,7 @@ package com.examServer.services.implementation;
 import com.examServer.entity.exam.Question;
 import com.examServer.entity.exam.Quiz;
 import com.examServer.repository.QuestionRepository;
+import com.examServer.repository.QuizRepository;
 import com.examServer.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,13 @@ import java.util.Set;
 public class QuestionServiceImplementation implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private QuizRepository quizRepository;
     @Override
     public Question addQuestions(Question question) {
+        Long qid = question.getQuiz().getQId();
+        Quiz quiz = quizRepository.findById(qid).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        question.setQuiz(quiz);
         return questionRepository.save(question);
     }
 

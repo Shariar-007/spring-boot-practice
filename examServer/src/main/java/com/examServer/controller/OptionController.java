@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/option")
 @CrossOrigin("*")
-@Tag(name = "options of Question")
+@Tag(name = "Options of Question")
 public class OptionController {
 
     @Autowired

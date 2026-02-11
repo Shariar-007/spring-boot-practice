@@ -2,6 +2,7 @@ package com.examServer.services.implementation;
 
 import com.examServer.entity.exam.Category;
 import com.examServer.entity.exam.Quiz;
+import com.examServer.repository.CategoryRepository;
 import com.examServer.repository.QuizRepository;
 import com.examServer.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,14 @@ import java.util.Set;
 public class QuizServiceImplementation implements QuizService {
     @Autowired
     private QuizRepository quizRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Override
     public Quiz addQuiz(Quiz quiz) {
+//        return quizRepository.save(quiz);
+        Long cid = quiz.getCategory().getCId();
+        Category category = categoryRepository.findById(cid).orElseThrow(() -> new RuntimeException("Category not found"));
+        quiz.setCategory(category);
         return quizRepository.save(quiz);
     }
 
