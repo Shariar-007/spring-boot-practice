@@ -10,5 +10,5 @@ import java.util.Set;
 @Repository
 public interface OptionRepository extends JpaRepository<OptionOfQuestion, Long> {
     Set<OptionOfQuestion> findByQuestion(Question question);
-    Set<OptionOfQuestion> findByIsCorrectAnswerAndQuestion(Question question, Boolean b);
+    Set<OptionOfQuestion> findByIsCorrectAnswerAndQuestion(Boolean isCorrectAnswer, Question question);
 }

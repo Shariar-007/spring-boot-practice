@@ -27,6 +27,9 @@ public class QuestionServiceImplementation implements QuestionService {
 
     @Override
     public Question updateQuestion(Question question) {
+        Long qid = question.getQuiz().getQId();
+        Quiz quiz = quizRepository.findById(qid).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        question.setQuiz(quiz);
         return questionRepository.save(question);
     }
 

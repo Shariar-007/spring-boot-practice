@@ -19,11 +19,17 @@ public class OptionServiceImplementation implements OptionService {
     private QuestionRepository questionRepository;
     @Override
     public OptionOfQuestion addOption(OptionOfQuestion option) {
+        Long questionId = option.getQuestion().getQuesId();
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
+        option.setQuestion(question);
         return optionRepository.save(option);
     }
 
     @Override
     public OptionOfQuestion updateOption(OptionOfQuestion option) {
+        Long questionId = option.getQuestion().getQuesId();
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
+        option.setQuestion(question);
         return optionRepository.save(option);
     }
 
@@ -46,7 +52,7 @@ public class OptionServiceImplementation implements OptionService {
     @Override
     public Set<OptionOfQuestion> getOptionByValidityForQuestion(Long questionId, Boolean b) {
         Question local = questionRepository.findById(questionId).get();
-        return new LinkedHashSet<>(optionRepository.findByIsCorrectAnswerAndQuestion(local,b));
+        return new LinkedHashSet<>(optionRepository.findByIsCorrectAnswerAndQuestion(b, local));
     }
 
     @Override

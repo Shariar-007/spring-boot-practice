@@ -20,7 +20,6 @@ public class QuizServiceImplementation implements QuizService {
     private CategoryRepository categoryRepository;
     @Override
     public Quiz addQuiz(Quiz quiz) {
-//        return quizRepository.save(quiz);
         Long cid = quiz.getCategory().getCId();
         Category category = categoryRepository.findById(cid).orElseThrow(() -> new RuntimeException("Category not found"));
         quiz.setCategory(category);
@@ -29,6 +28,9 @@ public class QuizServiceImplementation implements QuizService {
 
     @Override
     public Quiz updateQuiz(Quiz quiz) {
+        Long cid = quiz.getCategory().getCId();
+        Category category = categoryRepository.findById(cid).orElseThrow(() -> new RuntimeException("Category not found"));
+        quiz.setCategory(category);
         return quizRepository.save(quiz);
     }
 
