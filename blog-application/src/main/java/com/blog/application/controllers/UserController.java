@@ -1,5 +1,6 @@
 package com.blog.application.controllers;
 
+import com.blog.application.payloads.ApiResponse;
 import com.blog.application.payloads.UserDto;
 import com.blog.application.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -25,9 +29,21 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-//    @DeleteMapping("/{userId}")
-//    public ResponseEntity<ApiResponse> removeUser(@PathVariable Integer userId) {
-//        userService.deleteUser(userId);
-//        return new ResponseEntity<>(new ApiResponse("User Deleted Successfully", true), HttpStatus.OK);
-//    }
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUser() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Integer userId) {
+        UserDto foundedUser = userService.getUserById(userId);
+        return new ResponseEntity<>(foundedUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<ApiResponse> removeUser(@PathVariable Integer userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<>(new ApiResponse("User Deleted Successfully", true), HttpStatus.OK);
+    }
+
 }
