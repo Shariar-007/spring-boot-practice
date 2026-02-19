@@ -1,13 +1,14 @@
 package com.blog.application.payloads;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
-@NoArgsConstructor
+
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDto {
     private int id;
 
@@ -19,7 +20,6 @@ public class UserDto {
 
     private String password;
 
-    @NotNull
     private String about;
 
 //    private Set<Role> roles = new HashSet<>();
