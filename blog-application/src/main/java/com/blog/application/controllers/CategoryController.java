@@ -20,7 +20,6 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-    private CategoryDao foundedCategory;
 
     @PostMapping
     public ResponseEntity<CategoryDao> createCategory(@Valid @RequestBody CategoryDao categoryDao) {
