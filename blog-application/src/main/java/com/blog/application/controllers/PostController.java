@@ -4,11 +4,13 @@ import com.blog.application.configurations.AppConstants;
 import com.blog.application.payloads.ApiResponse;
 import com.blog.application.payloads.PostDao;
 import com.blog.application.payloads.PostResponse;
+import com.blog.application.services.FileService;
 import com.blog.application.services.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,10 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private FileService fileService;
+    @Value("${project.image}")
+    private String path;
 
     @PostMapping("/user/{userId}/category/{categoryId}/post")
     public ResponseEntity<PostDao> createPost(@Valid @RequestBody PostDao postDao,
@@ -91,22 +97,21 @@ public class PostController {
     }
 
     // post api
-//    @PostMapping("/post/image/upload/{postId}")
-//    public ResponseEntity<PostDao> uploadPostImage(@RequestParam("image") MultipartFile image,
-//                                                   @PathVariable Integer postId) throws IOException {
-//        PostDao postDao = postService.getPostById(postId);
-//        String fileName = fileService.uploadImage(path, image);
-//        postDao.setImage(fileName);
-//        PostDao updatedPost = this.postService.updatePost(postDao, postId);
-//        return new ResponseEntity<PostDao>(updatedPost, HttpStatus.OK);
-//    }
+    @PostMapping("/post/image/upload/{postId}")
+    public ResponseEntity<PostDao> uploadPostImage(@RequestParam("image") MultipartFile image,
+                                                   @PathVariable Integer postId) throws IOException {
+        PostDao postDao = postService.getPostById(postId);
+        String fileName = fileService.uploadImage(path, image);
+        postDao.setImage(fileName);
+        PostDao updatedPost = this.postService.updatePost(postDao, postId);
+        return new ResponseEntity<PostDao>(updatedPost, HttpStatus.OK);
+    }
 
     // method to serve files
-
-//    @GetMapping(value = "/post/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException{
-//        InputStream resource = fileService.getResource(path, imageName);
-//        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-//        StreamUtils.copy(resource, response.getOutputStream());
-//    }
+    @GetMapping(value = "/post/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException{
+        InputStream resource = fileService.getResource(path, imageName);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource, response.getOutputStream());
+    }
 }
