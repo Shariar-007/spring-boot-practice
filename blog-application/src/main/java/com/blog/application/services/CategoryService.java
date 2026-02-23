@@ -1,17 +1,17 @@
 package com.blog.application.services;
 
-import com.blog.application.payloads.CategoryDao;
+import com.blog.application.payloads.CategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
-    CategoryDao createCategory(CategoryDao category);
+    CategoryDto createCategory(CategoryDto category);
 
-    CategoryDao updateCategory(CategoryDao category, Integer categoryId);
+    CategoryDto updateCategory(CategoryDto category, Integer categoryId);
 
     void deleteCategory(Integer categoryId);
 
-    CategoryDao getCategoryById(Integer categoryId);
+    CategoryDto getCategoryById(Integer categoryId);
 
-    List<CategoryDao> getCategories();
+    List<CategoryDto> getCategories();
 }

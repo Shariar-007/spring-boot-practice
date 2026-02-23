@@ -2,7 +2,7 @@ package com.blog.application.controllers;
 
 import com.blog.application.configurations.AppConstants;
 import com.blog.application.payloads.ApiResponse;
-import com.blog.application.payloads.PostDao;
+import com.blog.application.payloads.PostDto;
 import com.blog.application.payloads.PostResponse;
 import com.blog.application.services.FileService;
 import com.blog.application.services.PostService;
@@ -36,17 +36,17 @@ public class PostController {
     private String path;
 
     @PostMapping("/user/{userId}/category/{categoryId}/post")
-    public ResponseEntity<PostDao> createPost(@Valid @RequestBody PostDao postDao,
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto,
                                               @PathVariable Integer userId,
                                               @PathVariable Integer categoryId) {
-        PostDao createdPost = postService.createPost(postDao, userId, categoryId);
+        PostDto createdPost = postService.createPost(postDto, userId, categoryId);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDao> updatePost(@Valid @RequestBody PostDao postDao, @PathVariable Integer postId) {
-        PostDao updatedPost = postService.updatePost(postDao, postId);
-        return new ResponseEntity<PostDao>(updatedPost, HttpStatus.OK);
+    public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable Integer postId) {
+        PostDto updatedPost = postService.updatePost(postDto, postId);
+        return new ResponseEntity<PostDto>(updatedPost, HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}/posts")
@@ -79,9 +79,9 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostDao> getPostById(@PathVariable Integer postId) {
-        PostDao post = postService.getPostById(postId);
-        return new ResponseEntity<PostDao>(post, HttpStatus.OK);
+    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
+        PostDto post = postService.getPostById(postId);
+        return new ResponseEntity<PostDto>(post, HttpStatus.OK);
     }
 
     @DeleteMapping("/posts/{postId}")
@@ -91,20 +91,20 @@ public class PostController {
     }
 
     @GetMapping("/posts/search")
-    public ResponseEntity<List<PostDao>> searchPostByTitle(@RequestParam(name = "title", required = true) String keyWords) {
-        List<PostDao> posts = postService.searchPostByTitle(keyWords);
-        return new ResponseEntity<List<PostDao>>(posts, HttpStatus.OK);
+    public ResponseEntity<List<PostDto>> searchPostByTitle(@RequestParam(name = "title", required = true) String keyWords) {
+        List<PostDto> posts = postService.searchPostByTitle(keyWords);
+        return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
     }
 
     // post api
     @PostMapping("/post/image/upload/{postId}")
-    public ResponseEntity<PostDao> uploadPostImage(@RequestParam("image") MultipartFile image,
+    public ResponseEntity<PostDto> uploadPostImage(@RequestParam("image") MultipartFile image,
                                                    @PathVariable Integer postId) throws IOException {
-        PostDao postDao = postService.getPostById(postId);
+        PostDto postDto = postService.getPostById(postId);
         String fileName = fileService.uploadImage(path, image);
-        postDao.setImage(fileName);
-        PostDao updatedPost = this.postService.updatePost(postDao, postId);
-        return new ResponseEntity<PostDao>(updatedPost, HttpStatus.OK);
+        postDto.setImage(fileName);
+        PostDto updatedPost = this.postService.updatePost(postDto, postId);
+        return new ResponseEntity<PostDto>(updatedPost, HttpStatus.OK);
     }
 
     // method to serve files

@@ -1,7 +1,7 @@
 package com.blog.application.controllers;
 
 import com.blog.application.payloads.ApiResponse;
-import com.blog.application.payloads.CategoryDao;
+import com.blog.application.payloads.CategoryDto;
 import com.blog.application.services.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,14 +22,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryDao> createCategory(@Valid @RequestBody CategoryDao categoryDao) {
-        CategoryDao createdCategory = categoryService.createCategory(categoryDao);
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+        CategoryDto createdCategory = categoryService.createCategory(categoryDto);
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDao> updateCategory(@Valid @RequestBody CategoryDao categoryDao, @PathVariable("categoryId") Integer categoryId) {
-        CategoryDao updatedCategory = categoryService.updateCategory(categoryDao, categoryId);
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable("categoryId") Integer categoryId) {
+        CategoryDto updatedCategory = categoryService.updateCategory(categoryDto, categoryId);
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
@@ -40,13 +40,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDao>> getAllCategory() {
+    public ResponseEntity<List<CategoryDto>> getAllCategory() {
         return ResponseEntity.ok(categoryService.getCategories());
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryDao> getCategoryById(@PathVariable("categoryId") Integer categoryId) {
-        CategoryDao foundedCategory = categoryService.getCategoryById(categoryId);
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("categoryId") Integer categoryId) {
+        CategoryDto foundedCategory = categoryService.getCategoryById(categoryId);
         return new ResponseEntity<>(foundedCategory, HttpStatus.OK);
     }
 }

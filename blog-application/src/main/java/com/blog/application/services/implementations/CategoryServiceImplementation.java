@@ -2,7 +2,7 @@ package com.blog.application.services.implementations;
 
 import com.blog.application.entities.Category;
 import com.blog.application.exceptions.ResourceNotFoundException;
-import com.blog.application.payloads.CategoryDao;
+import com.blog.application.payloads.CategoryDto;
 import com.blog.application.repositories.CategoryRepository;
 import com.blog.application.services.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -20,19 +20,19 @@ public class CategoryServiceImplementation implements CategoryService {
     @Autowired
     private ModelMapper modelMapper;
     @Override
-    public CategoryDao createCategory(CategoryDao categoryDao) {
-        Category localCategory = modelMapper.map(categoryDao, Category.class);
+    public CategoryDto createCategory(CategoryDto categoryDto) {
+        Category localCategory = modelMapper.map(categoryDto, Category.class);
         Category newCategory = categoryRepository.save(localCategory);
-        return modelMapper.map(newCategory, CategoryDao.class);
+        return modelMapper.map(newCategory, CategoryDto.class);
     }
 
     @Override
-    public CategoryDao updateCategory(CategoryDao categoryDao, Integer categoryId) {
+    public CategoryDto updateCategory(CategoryDto categoryDto, Integer categoryId) {
         Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
-        foundedCategory.setCategoryTitle(categoryDao.getCategoryTitle());
-        foundedCategory.setCategoryDetails(categoryDao.getCategoryDetails());
+        foundedCategory.setCategoryTitle(categoryDto.getCategoryTitle());
+        foundedCategory.setCategoryDetails(categoryDto.getCategoryDetails());
         Category updatedCategory = categoryRepository.save(foundedCategory);
-        return modelMapper.map(updatedCategory, CategoryDao.class);
+        return modelMapper.map(updatedCategory, CategoryDto.class);
     }
 
     @Override
@@ -42,14 +42,14 @@ public class CategoryServiceImplementation implements CategoryService {
     }
 
     @Override
-    public CategoryDao getCategoryById(Integer categoryId) {
+    public CategoryDto getCategoryById(Integer categoryId) {
         Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
-        return modelMapper.map(foundedCategory, CategoryDao.class);
+        return modelMapper.map(foundedCategory, CategoryDto.class);
     }
 
     @Override
-    public List<CategoryDao> getCategories() {
-        List<CategoryDao> categoryDaoList = categoryRepository.findAll().stream().map(category ->  modelMapper.map(category, CategoryDao.class)).collect(Collectors.toList());
-        return categoryDaoList;
+    public List<CategoryDto> getCategories() {
+        List<CategoryDto> categoryDtoList = categoryRepository.findAll().stream().map(category ->  modelMapper.map(category, CategoryDto.class)).collect(Collectors.toList());
+        return categoryDtoList;
     }
 }

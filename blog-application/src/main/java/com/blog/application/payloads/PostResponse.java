@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PostResponse {
-    private List<PostDao> content;
+    private List<PostDto> content;
     private int pageNumber;
     private int pageSize;
     private long totalElements;

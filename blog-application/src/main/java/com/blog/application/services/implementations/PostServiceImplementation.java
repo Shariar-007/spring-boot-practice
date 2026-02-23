@@ -4,7 +4,7 @@ import com.blog.application.entities.Category;
 import com.blog.application.entities.Post;
 import com.blog.application.entities.User;
 import com.blog.application.exceptions.ResourceNotFoundException;
-import com.blog.application.payloads.PostDao;
+import com.blog.application.payloads.PostDto;
 import com.blog.application.payloads.PostResponse;
 import com.blog.application.repositories.CategoryRepository;
 import com.blog.application.repositories.PostRepository;
@@ -34,8 +34,8 @@ public class PostServiceImplementation implements PostService {
     private ModelMapper modelMapper;
 
     @Override
-    public PostDao createPost(PostDao postDao, Integer userId, Integer categoryId) {
-        Post post = this.modelMapper.map(postDao, Post.class);
+    public PostDto createPost(PostDto postDto, Integer userId, Integer categoryId) {
+        Post post = this.modelMapper.map(postDto, Post.class);
         if(post.getImage() == null || post.getImage() != "") {
             post.setImage("default.png");
         }
@@ -47,17 +47,17 @@ public class PostServiceImplementation implements PostService {
         post.setCategory(category);
 
         Post savedPost = postRepository.save(post);
-        return this.modelMapper.map(savedPost, PostDao.class);
+        return this.modelMapper.map(savedPost, PostDto.class);
     }
 
     @Override
-    public PostDao updatePost(PostDao postDao, Integer postId) {
+    public PostDto updatePost(PostDto postDto, Integer postId) {
         Post foundedPost = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
-        foundedPost.setTitle(postDao.getPostTitle());
-        foundedPost.setContent(postDao.getPostContent());
-        foundedPost.setImage(postDao.getImage());
+        foundedPost.setTitle(postDto.getPostTitle());
+        foundedPost.setContent(postDto.getPostContent());
+        foundedPost.setImage(postDto.getImage());
         Post updatedPost = postRepository.save(foundedPost);
-        return this.modelMapper.map(updatedPost, PostDao.class);
+        return this.modelMapper.map(updatedPost, PostDto.class);
     }
 
     @Override
@@ -67,9 +67,9 @@ public class PostServiceImplementation implements PostService {
     }
 
     @Override
-    public PostDao getPostById(Integer postId) {
+    public PostDto getPostById(Integer postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
-        return modelMapper.map(post, PostDao.class);
+        return modelMapper.map(post, PostDto.class);
     }
 
     @Override
@@ -85,10 +85,10 @@ public class PostServiceImplementation implements PostService {
         Page<Post> pagedPost = postRepository.findAll(pageable);
 
         List<Post> posts = pagedPost.getContent();
-        List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
+        List<PostDto> postDtos =  posts.stream().map((post) -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
 
         PostResponse postResponse = new PostResponse();
-        postResponse.setContent(postDaos);
+        postResponse.setContent(postDtos);
         postResponse.setPageNumber(pagedPost.getNumber());
         postResponse.setPageSize(pagedPost.getSize());
         postResponse.setTotalElements(pagedPost.getTotalElements());
@@ -110,10 +110,10 @@ public class PostServiceImplementation implements PostService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> pagedPost = postRepository.findAllByUser(foundedUser, pageable);
         List<Post> posts = pagedPost.getContent();
-        List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
+        List<PostDto> postDtos =  posts.stream().map((post) -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
 
         PostResponse postResponse = new PostResponse();
-        postResponse.setContent(postDaos);
+        postResponse.setContent(postDtos);
         postResponse.setPageNumber(pagedPost.getNumber());
         postResponse.setPageSize(pagedPost.getSize());
         postResponse.setTotalElements(pagedPost.getTotalElements());
@@ -135,10 +135,10 @@ public class PostServiceImplementation implements PostService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Post> pagedPost = postRepository.findAllByCategory(foundedCategory, pageable);
         List<Post> posts = pagedPost.getContent();
-        List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
+        List<PostDto> postDtos =  posts.stream().map((post) -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
 
         PostResponse postResponse = new PostResponse();
-        postResponse.setContent(postDaos);
+        postResponse.setContent(postDtos);
         postResponse.setPageNumber(pagedPost.getNumber());
         postResponse.setPageSize(pagedPost.getSize());
         postResponse.setTotalElements(pagedPost.getTotalElements());
@@ -148,9 +148,9 @@ public class PostServiceImplementation implements PostService {
     }
 
     @Override
-    public List<PostDao> searchPostByTitle(String title) {
+    public List<PostDto> searchPostByTitle(String title) {
         List<Post> posts = postRepository.findByTitleContainingIgnoreCase(title);
-        List<PostDao> postDaos =  posts.stream().map((post) -> modelMapper.map(post, PostDao.class)).collect(Collectors.toList());
-        return postDaos;
+        List<PostDto> postDtos =  posts.stream().map((post) -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
 }
