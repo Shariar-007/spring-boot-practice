@@ -36,6 +36,6 @@ public class Post {
         @JoinColumn(name = "user_id")
         private User user;
 
-        @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
         private Set<Comment> comment = new HashSet<>();
 }

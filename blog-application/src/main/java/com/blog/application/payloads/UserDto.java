@@ -1,15 +1,16 @@
 package com.blog.application.payloads;
 
+import com.blog.application.entities.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -39,6 +40,5 @@ public class UserDto {
     @NotNull
     private String about;
 
-
-//    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 }

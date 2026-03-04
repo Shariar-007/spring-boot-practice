@@ -3,6 +3,7 @@ package com.blog.application.controllers;
 import com.blog.application.payloads.ApiResponse;
 import com.blog.application.payloads.CommentDto;
 import com.blog.application.services.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Api/Comment")
 public class CommentController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.blog.application.payloads;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,5 +10,7 @@ import lombok.Setter;
 @Setter
 public class CommentDto {
     private int id;
+
+    @NotEmpty
     private String content;
 }

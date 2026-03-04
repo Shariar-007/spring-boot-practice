@@ -1,12 +1,16 @@
 package com.blog.application.services.implementations;
 
+import com.blog.application.configurations.AppConstants;
+import com.blog.application.entities.Role;
 import com.blog.application.entities.User;
 import com.blog.application.exceptions.ResourceNotFoundException;
 import com.blog.application.payloads.UserDto;
+import com.blog.application.repositories.RoleRepository;
 import com.blog.application.repositories.UserRepository;
 import com.blog.application.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +22,12 @@ public class UserServiceImplementation implements UserService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = dtoToUser(userDto);
@@ -69,8 +79,13 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public UserDto registerNewUser(UserDto userDto) {
-//        User user = this.modelMapper.map(userDto, User.class);
-//        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        return null;
+        User user = this.modelMapper.map(userDto, User.class);
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        Role role = this.roleRepository.findById(AppConstants.ADMIN_USER).orElseThrow(() -> new ResourceNotFoundException("role", "id", AppConstants.NORMAL_USER));
+        user.getRoles().add(role);
+
+        User newUser = this.userRepository.save(user);
+        return this.modelMapper.map(newUser, UserDto.class);
     }
 }
