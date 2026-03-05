@@ -2,6 +2,7 @@ package com.blog.application.configurations;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -29,28 +30,43 @@ public class SwaggerConfig {
 //                                        .bearerFormat("JWT")));
 //    }
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI api() {
+
+        final String securitySchemeName = "JWT";
 
         return new OpenAPI()
-                .info(new Info()
-                        .title("Blogging Application API")
-                        .version("1.0")
-                        .description("API documentation for Blogging Application")
-                        .contact(new Contact()
-                                .name("Shahriar")
-                                .email("blog@gmail.com")
-                                .url("https://blogging.com")))
+                .info(getInfo())
 
-                .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
+                // Equivalent of securityContexts()
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
 
+                // Equivalent of securitySchemes(Arrays.asList(apiKeys()))
                 .components(new Components()
-                        .addSecuritySchemes("BearerAuth",
+                        .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
-                                        .name("Authorization")
+                                        .name(AUTHORIZATION_HEADER)
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")));
+    }
+
+    private Info getInfo() {
+
+        return new Info()
+                .title("Blogging Application : Api Documentation")
+                .description("This project is practicing by shariar to learn spring boot")
+                .version("1.0")
+                .termsOfService("This project is using spring boot")
+                .contact(new Contact()
+                        .name("Shahriar")
+                        .url("https://blogging.com")
+                        .email("blog@gmail.com"))
+                .license(new License()
+                        .name("License of APIS")
+                        .url("API license URL"));
     }
 
 }
